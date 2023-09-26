@@ -1,17 +1,24 @@
 import { Response } from 'express';
-// import httpStatus from 'http-status';
 import { AuthenticatedRequest } from '@/middlewares';
 import { ticketsService } from '@/services';
+import { CreateTicket } from '@/protocols';
+import httpStatus from 'http-status';
 
 export async function getAllTicketTypes(req: AuthenticatedRequest, res: Response) {
     const result = await ticketsService.getAllTicketTypes();
+    return res.send(result);
+}
+
+export async function getTicketsByUserId(req: AuthenticatedRequest, res: Response) {
+    const { userId } = req;
+    const result = await ticketsService.getTicketsByUserId(userId);
     return res.send(result)
 }
 
-// export async function singInPost(req: Request, res: Response) {
-//   const { email, password } = req.body as SignInParams;
+export async function createTicket(req: AuthenticatedRequest, res: Response) {
+    const userId = req.userId as number;
+    const body = req.body as CreateTicket;
 
-//   const result = await authenticationService.signIn({ email, password });
-
-//   return res.status(httpStatus.OK).send(result);
-// }
+    const result = await ticketsService.createTicket(userId, body.ticketTypeId)
+    return res.status(httpStatus.CREATED).send(result);
+}

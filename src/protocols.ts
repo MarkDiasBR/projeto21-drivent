@@ -1,4 +1,6 @@
 export type ApplicationError = {
+  import { Ticket } from '@prisma/client';
+import { CreateTicket } from './schemas/tickets-schemas';
   name: string;
   message: string;
 };
@@ -26,3 +28,5 @@ export type AddressEnrollment = {
 export type CEP = {
   cep: string;
 };
+
+export type CreateTicket = Pick<Ticket, "ticketTypeId">
